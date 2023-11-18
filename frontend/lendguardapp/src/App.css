@@ -54,6 +54,29 @@ h1 {
 }
 
 
+.buttonApply {
+  margin-top: 10px;
+  margin: 10px auto; 
+  width: 10%;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(45deg, #ff8a00, #e52e71);
+  color: #bebebe;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.buttonApply:hover {
+  background: linear-gradient(45deg, #e52e71, #ff8a00);
+}
+
+.buttonApply:active {
+  transform: scale(0.95);
+}
+
 
 
 .connectBtn {

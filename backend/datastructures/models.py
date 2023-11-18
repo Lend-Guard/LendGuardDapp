@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 
+
 class HealthSettings(BaseModel):
-    healthRatioNotification: float
-    healthRatioExecution: float
-    targetHealthRatio: float
+    health_ratio_notification: float
+    health_ratio_execution: float
+    target_health_ratio: float
     address: str

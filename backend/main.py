@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from backend.datastructures.models import HealthSettings
 from backend.debank_connector import DebankConnector
-from backend.database.orm import update_setting
+from backend.database.orm import update_setting,get_setting
 
 from backend.utils import get_vault_db, get_debank_connector
 
@@ -21,14 +21,14 @@ async def status():
 @app.post("/update_settings_healths", status_code=201)
 async def update_settings_healths(settings: HealthSettings, session: Session = Depends(get_vault_db)):
     try:
-        update_setting(session, settings)
+        update_setting(session,settings.health_ratio_notification,settings.health_ratio_execution,settings.target_health_ratio, settings.address)
         return {"message": "Settings updated successfully", "data": settings}
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to update settings {e}")
 
 # [DB Call] Get settings
 @app.get("/get_setting/{address}", response_model=HealthSettings)
-def get_setting(address: str, db: Session = Depends(get_vault_db)):
+def get_setting_user(address: str, db: Session = Depends(get_vault_db)):
     user_setting = get_setting(db, address)
     if user_setting is None:
         raise HTTPException(status_code=500, detail="Setting not found")

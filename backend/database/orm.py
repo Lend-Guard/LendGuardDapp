@@ -1,4 +1,4 @@
-from sqlalchemy import select, Column, String, Integer, Float
+from sqlalchemy import create_engine, select, Column, String, Integer, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -40,7 +40,7 @@ def update_setting(
     """
     try: 
 
-        user = session.execute(select(UserModel).where(UserModel.address == address)).first()
+        user = session.query(UserModel).filter(UserModel.address == address).first()
 
         if user:
             user.health_ratio_notification = health_ratio_notification
@@ -48,9 +48,9 @@ def update_setting(
             user.target_health_ratio = target_health_ratio
         else:
             new_user = UserModel(
-                healthRatioNotification=health_ratio_notification,
-                healthRatioExecution=health_ratio_execution,
-                targetHealthRatio=target_health_ratio,
+                health_ratio_notification=health_ratio_notification,
+                health_ratio_execution=health_ratio_execution,
+                target_health_ratio=target_health_ratio,
                 address=address
             )
             session.add(new_user)
@@ -72,3 +72,4 @@ def get_setting(session, address: str):
         address (str): user's wallet address
     """
     return session.query(UserModel).filter(UserModel.address == address).first()        
+

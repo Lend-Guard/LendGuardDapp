@@ -42,7 +42,6 @@ export async function getSettings(address) {
       if (window.ethereum) {
 
         await window.ethereum.request({ method: 'eth_requestAccounts' });
-  
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -66,5 +65,9 @@ export async function getSettings(address) {
       console.error('Error fetching vaults data:', error);
     }
   };
+
+
+
+
 
 

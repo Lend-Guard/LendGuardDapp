@@ -4,7 +4,7 @@ import { useAccount, useContractWrite, serialize, deserialize } from 'wagmi';
 
 import { fetchDeploy } from '../api/useBackData';
 
-const AssetComponent = ({ assets, onSupply, onBorrow }) => {
+const CurrentSettings = ({ assets, onSupply, onBorrow }) => {
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [amount, setAmount] = useState('');
     const [health_ratio_notification, sethealth_ratio_notification] = useState('');
@@ -71,54 +71,24 @@ const AssetComponent = ({ assets, onSupply, onBorrow }) => {
 
     return (
 
-        <div className='intro' style={{ marginTop: '30px' }}>
-
-            <h2 style={{ color: '#bebebe' }}>Configure your personal Guard</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div>
-                    <div className="input-container">
-                        <label style={{ color: '#bebebe' }}>Target Health factor:</label>
-                        <input
-                            type="number"
-                            value={target_health_ratio}
-                            onChange={(e) => handleInputChange('target_health_ratio', e.target.value)}
-                            className="custom-input"
-                        />
-                    </div>
-
-                    <div className="input-container">
-                        <label style={{ color: '#bebebe' }}>Notify me in Push Protocol before, %:</label>
-                        <input
-                            type="number"
-                            value={health_ratio_notification}
-                            onChange={(e) => handleInputChange('health_ratio_notification', e.target.value)}
-                            className="custom-input"
-                        />
-                    </div>
-
-                    <div className="input-container">
-                        <label style={{ color: '#bebebe' }}>Save me before, %:</label>
-                        <input
-                            type="number"
-                            value={health_ratio_execution}
-                            onChange={(e) => handleInputChange('health_ratio_execution', e.target.value)}
-                            className="custom-input"
-                        />
-                    </div>
-                </div>
-                <button
-                    onClick={handleApply}
-                    disabled={isApplyButtonDisabled}
-
-                    className='buttonApply'
-                >
-                    Deploy
-                </button>
-            </div>
-
-
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: "30px" }}>
+        <div className="input-container">
+          <label style={{ color: '#bebebe' , marginRight: "20px"}}>Target Health factor</label>
+          <div style={{ color: '#bebebe',fontWeight: 'bold' }}>{target_health_ratio} <button >Update</button></div>
+          
         </div>
+  
+        <div className="input-container">
+          <label style={{ color: '#bebebe', marginRight: "20px" }}>Notify me in Push Protocol before</label>
+          <div style={{ color: '#bebebe', fontWeight: 'bold' }}>{health_ratio_notification}% <button >Update</button></div>
+        </div>
+  
+        <div className="input-container">
+          <label style={{ color: '#bebebe' }}>Save me before</label>
+          <div style={{ color: '#bebebe',fontWeight: 'bold' }}>{health_ratio_execution}% <button >Update</button></div>
+        </div>
+      </div>
     );
 };
 
-export default AssetComponent;
+export default CurrentSettings;

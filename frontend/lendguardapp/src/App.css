@@ -87,7 +87,7 @@ h1 {
 .buttonApply {
   margin-top: 10px;
   margin: 10px auto; 
-  width: 15%;
+  width: 270px;
   align-items: center;
   background: linear-gradient(45deg, #ff8a00, #e52e71);
   color: #bebebe;
@@ -182,4 +182,23 @@ h1 {
   to {
     transform: rotate(360deg);
   }
+}
+
+
+
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.custom-input {
+  width: 270px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid linear-gradient(45deg, #ff8a00, #e52e71);
+  background: #141414;
+  color: #bebebe;
+  margin-top: 10px;
 }

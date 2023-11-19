@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { updateSettings,getSettings } from "../api/useBackData";
 import { useAccount, useContractWrite, serialize, deserialize } from 'wagmi';
 
+import { fetchDeploy } from '../api/useBackData';
+
 const AssetComponent = ({ assets, onSupply, onBorrow }) => {
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [amount, setAmount] = useState('');
@@ -52,12 +54,14 @@ const AssetComponent = ({ assets, onSupply, onBorrow }) => {
     const handleApply = async () => {
         console.log('Applying values:', health_ratio_notification, health_ratio_execution, target_health_ratio);
         try {
+            fetchDeploy({health_ratio_notification, health_ratio_execution, target_health_ratio})
             
             const data = await updateSettings(address, health_ratio_notification, health_ratio_execution, target_health_ratio);
 
             sethealth_ratio_notification(data.health_ratio_notification);
             sethealth_ratio_execution(data.health_ratio_execution);
             settarget_health_ratio(data.target_health_ratio);
+            
     
             console.log('Response from server:', data);
         } catch (error) {
@@ -65,23 +69,11 @@ const AssetComponent = ({ assets, onSupply, onBorrow }) => {
         }
     };
 
-    const handleSupply = () => {
-        if (selectedAsset && amount) {
-            onSupply(selectedAsset, amount);
-        }
-    };
-
-    const handleBorrow = () => {
-        if (selectedAsset && amount) {
-            onBorrow(selectedAsset, amount);
-        }
-    };
-
     return (
 
         <div className='intro' style={{marginTop: '30px'}}>
 
-            <h2 style={{ color: '#bebebe' }}>Fill your Guard settings to deploy</h2>
+            <h2 style={{ color: '#bebebe' }}>Configure your personal Guard</h2>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div >
                     <div style={{ textAlign: 'left' }}>
@@ -142,26 +134,10 @@ const AssetComponent = ({ assets, onSupply, onBorrow }) => {
                     
                     className='buttonApply'
                 >
-                    Apply
+                    Deploy
                 </button>
             </div>
-            {/* <h2>Assets to Supply/Borrow</h2>
-            <select onChange={(e) => setSelectedAsset(e.target.value)}>
-                <option value="">Select Asset</option>
-                {assets.map((asset) => (
-                    <option key={asset.id} value={asset.id}>
-                        {asset.name}
-                    </option>
-                ))}
-            </select>
-            <input
-                type="number"
-                placeholder="Amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-            />
-            <button onClick={handleSupply}>Supply</button>
-            <button onClick={handleBorrow}>Borrow</button> */}
+            
 
         </div>
     );

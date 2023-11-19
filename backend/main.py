@@ -9,8 +9,18 @@ from backend.database.orm import update_setting,get_setting
 
 from backend.utils import get_vault_db, get_debank_connector
 
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # [System Call] Status check
 @app.get("/status", status_code=status.HTTP_200_OK)

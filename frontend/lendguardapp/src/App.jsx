@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import Headers from "./Base/Header"
 import Main  from "./Base/Main"
 import AssetComponent from './Base/Services';
+import { Route,Switch, Routes, Navigate, useParams } from "react-router-dom";
 import './App.css';
 
 function App() {
@@ -23,9 +24,12 @@ function App() {
   };
   return (
     <div className="App">
-      <Headers/>
-      <Main/>
-      <AssetComponent assets={assets} onSupply={onSupply} onBorrow={onBorrow} />
+      <Headers />
+      <Routes>
+        <Route path="/" element={<Main/>} />
+        <Route path="/assets" element={<AssetComponent assets={assets} onSupply={onSupply} onBorrow={onBorrow}/>}/>
+      </Routes>
+      {/* <AssetComponent assets={assets} onSupply={onSupply} onBorrow={onBorrow} /> */}
     </div>
   );
 }

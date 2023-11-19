@@ -1,39 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { updateSettings,getSettings } from "../api/useBackData";
+import { useAccount, useContractWrite, serialize, deserialize } from 'wagmi';
 
 const AssetComponent = ({ assets, onSupply, onBorrow }) => {
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [amount, setAmount] = useState('');
-    const [healthRatioNotification, setHealthRatioNotification] = useState('');
-    const [healthRatioExecution, setHealthRatioExecution] = useState('');
-    const [targetHealthRatio, setTargetHealthRatio] = useState('');
+    const [health_ratio_notification, sethealth_ratio_notification] = useState('');
+    const [health_ratio_execution, sethealth_ratio_execution] = useState('');
+    const [target_health_ratio, settarget_health_ratio] = useState('');
     const [isApplyButtonDisabled, setIsApplyButtonDisabled] = useState(true);
+
+    const { address, isConnected, isDisconnected } = useAccount()
 
     const handleInputChange = (inputType, value) => {
         switch (inputType) {
-            case 'healthRatioNotification':
-                setHealthRatioNotification(value);
+            case 'health_ratio_notification':
+                sethealth_ratio_notification(value);
                 break;
-            case 'healthRatioExecution':
-                setHealthRatioExecution(value);
+            case 'health_ratio_execution':
+                sethealth_ratio_execution(value);
                 break;
-            case 'targetHealthRatio':
-                setTargetHealthRatio(value);
+            case 'target_health_ratio':
+                settarget_health_ratio(value);
                 break;
             default:
                 break;
         }
 
         const areAllInputsFilled = (
-            healthRatioNotification !== '' &&
-            healthRatioExecution !== '' &&
-            targetHealthRatio !== ''
+            health_ratio_notification !== '' &&
+            health_ratio_execution !== '' &&
+            target_health_ratio !== ''
         );
 
         setIsApplyButtonDisabled(!areAllInputsFilled);
     };
 
-    const handleApply = () => {
-        console.log('Applying values:', healthRatioNotification, healthRatioExecution, targetHealthRatio);
+
+    useEffect(() => {
+        if (address !== undefined) {
+          getSettings(address).then(data => {
+            sethealth_ratio_notification(data.health_ratio_notification);
+            sethealth_ratio_execution(data.health_ratio_execution);
+            settarget_health_ratio(data.target_health_ratio);
+          }).catch(error => {
+            console.error('Error fetching settings:', error);
+          });
+        }
+      }, [address]);
+
+    const handleApply = async () => {
+        console.log('Applying values:', health_ratio_notification, health_ratio_execution, target_health_ratio);
+        try {
+            
+            const data = await updateSettings(address, health_ratio_notification, health_ratio_execution, target_health_ratio);
+
+            sethealth_ratio_notification(data.health_ratio_notification);
+            sethealth_ratio_execution(data.health_ratio_execution);
+            settarget_health_ratio(data.target_health_ratio);
+    
+            console.log('Response from server:', data);
+        } catch (error) {
+            console.error('Error applying values:', error);
+        }
     };
 
     const handleSupply = () => {
@@ -50,17 +79,17 @@ const AssetComponent = ({ assets, onSupply, onBorrow }) => {
 
     return (
 
-        <div>
+        <div className='intro' style={{marginTop: '30px'}}>
 
             <h2 style={{ color: '#bebebe' }}>Fill your Guard settings to deploy</h2>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div>
+                <div >
                     <div style={{ textAlign: 'left' }}>
                         <label style={{ color: '#bebebe' }}>Health Ratio Notification:</label>
                         <input
                             type="number"
-                            value={healthRatioNotification}
-                            onChange={(e) => handleInputChange('healthRatioNotification', e.target.value)}
+                            value={health_ratio_notification}
+                            onChange={(e) => handleInputChange('health_ratio_notification', e.target.value)}
                             style={{
                                 marginTop: '10px',
                                 width: '80px',
@@ -76,8 +105,8 @@ const AssetComponent = ({ assets, onSupply, onBorrow }) => {
                         <label style={{ color: '#bebebe' }}>Health Ratio Execution:</label>
                         <input
                             type="number"
-                            value={healthRatioExecution}
-                            onChange={(e) => handleInputChange('healthRatioExecution', e.target.value)}
+                            value={health_ratio_execution}
+                            onChange={(e) => handleInputChange('health_ratio_execution', e.target.value)}
                             style={{
                                 marginTop: '10px',
                                 width: '80px',
@@ -93,8 +122,8 @@ const AssetComponent = ({ assets, onSupply, onBorrow }) => {
                     <label style={{ color: '#bebebe' }}>Target Health Ratio:</label>
                     <input
                         type="number"
-                        value={targetHealthRatio}
-                        onChange={(e) => handleInputChange('targetHealthRatio', e.target.value)}
+                        value={target_health_ratio}
+                        onChange={(e) => handleInputChange('target_health_ratio', e.target.value)}
                         style={{
                             marginTop: '10px',
                             width: '80px',
